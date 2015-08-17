@@ -1,0 +1,62 @@
+<html>
+<head>
+<title>Survey Form Revisited</title>
+	<!-- <link rel="stylesheet" href="/stylesheets/style.css" /> -->
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+
+	<!-- Optional theme -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="/socket.io/socket.io.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			// this triggers the connection even in our server!
+			var socket = io.connect();
+			// we'll write all the socket stuff after the above line!
+
+			$('#epic').click(function() {
+				socket.emit("button_clicked", { 
+					count: 1
+				 });
+				return false;
+			});
+
+			$('#reset').click(function() {
+				socket.emit("reset", { 
+					count: 0
+				 });
+				return false;
+			});
+
+			socket.on('my_full_broadcast_event', function (data) {
+				$('#times').html(data.count);
+			});
+		})
+	</script>
+</head>
+<body>
+	<div class="container">
+		<div class="row">
+			<div class="cols-sm-12">
+				<h1>The button has been pushed <span id="times">0</span> time(s).</h1>
+			</div>
+		</div>
+		<div class="row">
+			<div class="cols-sm-12">
+					<h3>Push the button to update the count!</h3>
+					<button id="epic" type="submit" class="btn btn-default">Push the epic button</button>
+			</div>
+		</div>
+		<div class="row">
+			<div class="cols-sm-3 cols-sm-offset-9">
+					<h3>Push the button to reset the count!</h3>
+					<button id="reset" type="submit" class="btn btn-danger">Reset</button>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
